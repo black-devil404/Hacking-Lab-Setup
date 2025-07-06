@@ -1,0 +1,27 @@
+✅ Recommended Installation (All-in-One) – Using Wazuh Install Script
+
+Works on: Ubuntu 20.04 / 22.04
+⚙️ Step-by-Step Installation
+1. Update System
+
+sudo apt update && sudo apt upgrade -y
+
+2. Install Required Packages
+
+sudo apt install curl unzip apt-transport-https -y
+
+3. Download Wazuh Install Script
+
+curl -sO https://packages.wazuh.com/4.8/wazuh-install.sh
+
+    Make sure to verify the latest version from: https://documentation.wazuh.com/
+
+4. Make Script Executable
+
+chmod +x wazuh-install.sh
+
+5. Run the Installer (All-in-One)
+
+sudo ./wazuh-install.sh -a
+
+

@@ -1,0 +1,54 @@
+sudo apt update
+sudo apt install qemu-kvm libvirt-daemon-system libvirt-clients virtinst bridge-utils -y
+
+gunzip /pfvm/netgate-installer-amd64.iso.gz
+
+✅ 2. Recreate pfSense VM with VNC Access
+
+On the Ubuntu Server, run:
+
+virt-install \
+--name pfsense \
+--ram 2048 \
+--vcpus 2 \
+--disk path=/pfvm/pfsense.qcow2,size=10,bus=virtio \
+--cdrom /pfvm/netgate-installer-amd64.iso \
+--osinfo detect=on,name=freebsd13.2 \
+--network network=default,model=virtio \
+--network type=direct,source=eno1,source_mode=bridge,model=virtio \
+--graphics vnc,listen=0.0.0.0 \
+--noautoconsole
+
+✅ This starts the VM and exposes a VNC display on the Ubuntu Server.
+✅ 3. Find the VNC Port
+
+On the Ubuntu Server, run:
+
+virsh vncdisplay pfsense
+
+Example output:
+
+:0
+
+Which means VNC is running on port 5900.
+✅ 4. On Your Ubuntu Laptop, install a VNC viewer
+
+If not already installed, use:
+
+sudo apt install remmina
+
+Or:
+
+sudo apt install tigervnc-viewer
+
+✅ 5. Connect to the Server’s VNC
+
+On your laptop, open Remmina or VNC viewer and connect to:
+
+<Ubuntu-Server-IP>:5900
+
+Example:
+
+192.168.1.18:5900
+
+You’ll now see the pfSense GUI installer.
