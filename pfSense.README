@@ -52,3 +52,85 @@ Example:
 192.168.1.18:5900
 
 You’ll now see the pfSense GUI installer.
+
+#Accidently configured WAN in NAT mode so it need to be set in bridg for easy access
+
+#edit vm xml
+
+virsh edit pfsense
+
+# Replace NAT interface with this:
+<interface type='direct'>
+  <mac address='52:54:00:16:2d:a0'/>
+  <source dev='wlp3s0' mode='bridge'/>
+  <model type='virtio'/>
+</interface>
+
+# Reboot VM
+virsh shutdown pfsense
+virsh start pfsense
+virsh console pfsense
+
+#connect using remmina <refer previes steps>
+
+)
+📌 Objective:
+WAN → Internet via Wi-Fi bridge (wlp3s0)
+
+LAN → Local subnet via eno1 (connects to your laptop/Kali)
+
+LAN Subnet: 10.22.2.0/24
+
+🔧 Step-by-Step Setup (After pfSense boots via VNC):
+1️⃣ Assign Interfaces
+Navigate to the menu using keyboard.
+
+Select:
+
+Copy
+Edit
+1) Assign Interfaces
+Then assign:
+
+WAN → vtnet0 (bridged to wlp3s0)
+
+LAN → vtnet1 (connected to eno1)
+
+2️⃣ Set LAN IP
+Select:
+
+kotlin
+Copy
+Edit
+2) Set interface IP address
+Choose LAN (vtnet1)
+
+Set:
+
+IP: 10.22.2.1
+
+Subnet mask: /24 (255.255.255.0)
+
+No upstream gateway (just press Enter)
+
+Enable DHCP: yes
+
+Range: 10.22.2.100 to 10.22.2.150
+
+Do NOT enable LAN IPv6
+
+3️⃣ Confirm WAN IP
+At main menu screen, confirm:
+
+rust
+Copy
+Edit
+WAN  -> vtnet0 -> 192.168.1.X
+LAN  -> vtnet1 -> 10.22.2.1
+
+If WAN says none, go to:
+
+1) Assign Interfaces
+And set it to DHCP and Enable.
+
+
